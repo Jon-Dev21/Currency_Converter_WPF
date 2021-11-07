@@ -44,12 +44,12 @@ namespace CurrencyConverter
 
             // Add rows to the datatable with text and value (currency exchange rate).
             dtCurrency.Rows.Add("-- SELECT --", 0);
-            dtCurrency.Rows.Add("INR", 1);
-            dtCurrency.Rows.Add("USD", 75);
-            dtCurrency.Rows.Add("EUR", 85);
-            dtCurrency.Rows.Add("SAR", 20);
+            dtCurrency.Rows.Add("INR - Indian Rupee", 1);
+            dtCurrency.Rows.Add("USD - US Dollar", 75);
+            dtCurrency.Rows.Add("EUR - Euro", 85);
+            dtCurrency.Rows.Add("SAR - Saudi Arabian Riyal", 20);
             dtCurrency.Rows.Add("POUND", 5);
-            dtCurrency.Rows.Add("DEM", 43);
+            dtCurrency.Rows.Add("DEM - German Deutsche Mark", 43);
 
             // Binding our DataTable to the ComboBox in the combo boxes
             cmbFromCurrency.ItemsSource = dtCurrency.DefaultView;
