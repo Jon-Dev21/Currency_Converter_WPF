@@ -3,34 +3,96 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CurrencyConverter"
+        xmlns:local="clr-namespace:CurrencyConverter" xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
-        Title="Currency Converter" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" Icon="Currency.ico">
+        Title="Currency Converter" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" Icon="Currency.ico"
+        BorderBrush="DarkGray" BorderThickness="10">
         <!--SizeToContent is used to size the window using the width and height of all the content in the window-->
 
     <Grid>
+        <!--Defining Grid Rows-->
         <Grid.RowDefinitions>
             <RowDefinition Height="60"></RowDefinition>
             <RowDefinition Height="80"></RowDefinition>
             <RowDefinition Height="150"></RowDefinition>
             <RowDefinition Height="100"></RowDefinition>
-            <RowDefinition Height="150"></RowDefinition>
+            <RowDefinition Height="180"></RowDefinition>
         </Grid.RowDefinitions>
+        
+        <!--This border and rectangle style the second grid row. -->
         <Border Grid.Row="2" Width="800" CornerRadius="10" BorderThickness="5">
             <Border.BorderBrush>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                    <GradientStop Color="#ec2075" Offset="0.0"/>
-                    <GradientStop Color="#f33944" Offset="0.50"/>
+                    <GradientStop Color="#FF2FBC4F" Offset="0.0"/>
+                    <GradientStop Color="#FF29803D" Offset="0.50"/>
                 </LinearGradientBrush>
             </Border.BorderBrush>
             <Rectangle Grid.Row="2">
                 <Rectangle.Fill>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                        <GradientStop Color="#ec2075" Offset="0.0"/>
-                        <GradientStop Color="#f33944" Offset="0.50"/>
+                        <GradientStop Color="#FF2FCB17" Offset="0.1"/>
+                        <GradientStop Color="#FF39F377" Offset="0.60"/>
                     </LinearGradientBrush>
                 </Rectangle.Fill>
             </Rectangle>
         </Border>
+        
+        <!--Creating the stack panel-->
+        <!--This stack panel is in grid row 0 and it's used to place the project title. It's width is larger than the rectangle (This is why the rectangle looks smaller)-->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Height="50" Width="1000" VerticalAlignment="Center">
+            <!--Label for the title-->
+            <Label Height="50" Width="1000" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Currency Converter" FontSize="32" Foreground="#FF176B1E" FontWeight="Bold"></Label>
+        </StackPanel>
+        
+        <!--StackPanel used to hold the converted value. Elements in row 1 of our grid-->
+        <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center" Height="80" Width="1000">
+            <Label Height="40" Width="1000" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="Converted Currency" FontSize="20"></Label>
+            <Label Name="lblCurrency" Height="40" Width="1000" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="20"></Label>
+        </StackPanel>
+        
+        <!--StackPanel used for our textBox and ListBox Labels. Elements in row 2 of our grid-->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Height="60" Width="800">
+            <Label Height="40" Width="150" Content="Enter Amount : " Margin="35 0 0 0" VerticalAlignment="Bottom" Foreground="White" FontSize="20"></Label>
+            <Label Height="40" Width="150" Content="From : " Margin="110 0 0 0" VerticalAlignment="Bottom" Foreground="White" FontSize="20"></Label>
+            <Label Height="40" Width="150" Content="To : " Margin="130 0 0 0" VerticalAlignment="Bottom" Foreground="White" FontSize="20"></Label>
+        </StackPanel>
+        
+        <!--StackPanel used to hold our textBoxes and ListBoxes. Elements in row 2 of our grid-->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Height="90" Width="800" VerticalAlignment="Bottom">
+            <TextBox Name="txtCurrency" Width="200" Height="30" Margin="40 0 0 0" PreviewTextInput="NumberValidationTextBox" FontSize="18" VerticalContentAlignment="Center" VerticalAlignment="Top"></TextBox>
+            <ComboBox Name="cmbFromCurrency" Width="170" Height="30" Margin="60 0 40 0" FontSize="18" VerticalContentAlignment="Center" VerticalAlignment="Top" MaxDropDownHeight="150"></ComboBox>
+            <!--Installed new nuget package fontawesome.wpf as well as included xmlns:fa="http://schemas.fontawesome.io/icons/"-->
+            <fa:ImageAwesome Icon="Exchange" Height="30" Width="30" Foreground="White" VerticalAlignment="Top"></fa:ImageAwesome>
+            <ComboBox Name="cmbToCurrency" Width="170" Height="30" Margin="40 0 0 0" FontSize="18" VerticalContentAlignment="Center" VerticalAlignment="Top" MaxDropDownHeight="150"></ComboBox>
+        </StackPanel>
+
+        <!--StackPanel used to hold our functional buttons. Elements in row 3 of our grid-->
+        <StackPanel Grid.Row="3" Height="100" Width="1000" Orientation="Horizontal">
+            <!--Convert Button-->
+            <!--In app.xaml > application.resources, added the "Rounded button" static resource-->
+            <Button Name="Convert" Height="40" Width="150" Content="Convert" Click="Convert_Click" Margin="350 0 20 0" Foreground="White" FontSize="20" Style="{StaticResource ButtonRound}">
+                <Button.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#FF26A587" Offset="0.2"/>
+                        <GradientStop Color="#FF179062" Offset="0.5"/>
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+            
+            <!--Clear Button-->
+            <Button Name="Clear" Height="40" Width="150" Content="Clear" Click="Clear_Click" Foreground="White" FontSize="20" Style="{StaticResource ButtonRound}">
+                <Button.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#FF26A587" Offset="1.0"/>
+                        <GradientStop Color="#FF179062" Offset="0.2"/>
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+        </StackPanel>
+        
+        <!--StackPanel used to hold the project logo. Element is in row 4 of the grid.-->
+        <StackPanel Grid.Row="4" Height="150" Width="795" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+            <Image Height="150" Width="170" Source="Icons\Currency.png"  Margin="325 0"/>
+        </StackPanel>
     </Grid>
 </Window>

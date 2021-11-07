@@ -13,3 +13,6 @@ C:\Users\jonac\Desktop\myCareer\Projects 2021\Currency_Converter_WPF\CurrencyCon
 C:\Users\jonac\Desktop\myCareer\Projects 2021\Currency_Converter_WPF\CurrencyConverter\CurrencyConverter\obj\Debug\CurrencyConverter.csproj.CoreCompileInputs.cache
 C:\Users\jonac\Desktop\myCareer\Projects 2021\Currency_Converter_WPF\CurrencyConverter\CurrencyConverter\obj\Debug\CurrencyConverter.exe
 C:\Users\jonac\Desktop\myCareer\Projects 2021\Currency_Converter_WPF\CurrencyConverter\CurrencyConverter\obj\Debug\CurrencyConverter.pdb
+C:\Users\jonac\Desktop\myCareer\Projects 2021\Currency_Converter_WPF\CurrencyConverter\CurrencyConverter\bin\Debug\FontAwesome.WPF.dll
+C:\Users\jonac\Desktop\myCareer\Projects 2021\Currency_Converter_WPF\CurrencyConverter\CurrencyConverter\bin\Debug\FontAwesome.WPF.xml
+C:\Users\jonac\Desktop\myCareer\Projects 2021\Currency_Converter_WPF\CurrencyConverter\CurrencyConverter\obj\Debug\App.baml
