@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CurrencyConverter" xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
         Title="Currency Converter" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" Icon="Currency.ico"
-        BorderBrush="DarkGray" BorderThickness="10">
+        BorderBrush="DarkGray" BorderThickness="10" MinHeight="620" MinWidth="1000">
         <!--SizeToContent is used to size the window using the width and height of all the content in the window-->
 
     <Grid>
