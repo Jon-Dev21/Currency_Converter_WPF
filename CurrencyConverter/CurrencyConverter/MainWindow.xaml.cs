@@ -33,7 +33,7 @@ namespace CurrencyConverter
         //Create object for SqlDataAdapter (Used to communicate data in right format)
         SqlDataAdapter da = new SqlDataAdapter();
 
-        private int currentId = 0;
+        private int CurrencyId = 0;
         private double FromAmount = 0;
         private double ToAmount = 0;
 
@@ -56,7 +56,7 @@ namespace CurrencyConverter
         }
 
         /// <summary>
-        /// Method used to bind values to my combo boxes.
+        /// Method used to bind and display values to my combo boxes.
         /// </summary>
         private void BindCurrency()
         {
@@ -267,24 +267,242 @@ namespace CurrencyConverter
             cmbToCurrency.SelectedValue = 0;
         }
 
-        private void btnSave_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// This method is used to clear all input entered in the Currency Master tab.
+        /// </summary>
+        private void ClearMaster()
         {
-
-        }
-
-        private void btnCancel_Click(object sender, RoutedEventArgs e)
-        {
-
+            try
+            {
+                txtAmount.Text = string.Empty;
+                txtCurrencyName.Text = string.Empty;
+                btnSave.Content = "Save";
+                GetData();
+                CurrencyId = 0;
+                BindCurrency();
+                txtAmount.Focus();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         /// <summary>
-        /// Method triggers when a data grid cell is selected. 
+        /// This method is used to bind the database data to the dataGrid view in the Currency_Masters Tab.
+        /// </summary>
+        public void GetData()
+        {
+            //The method is used for connect with database and open database connection    
+            MyConnection();
+
+            //Create Datatable object
+            DataTable dt = new DataTable();
+
+            //Write Sql Query for Get data from database table. Query written in double quotes and after comma provide connection    
+            cmd = new SqlCommand("SELECT * FROM Currency_Master", con);
+
+            //CommandType define Which type of command execute like Text, StoredProcedure, TableDirect.    
+            cmd.CommandType = CommandType.Text;
+
+            //It is accept a parameter that contains the command text of the object's SelectCommand property.
+            da = new SqlDataAdapter(cmd);
+
+            //The DataAdapter serves as a bridge between a DataSet and a data source for retrieving and saving data. The Fill operation then adds the rows to destination DataTable objects in the DataSet    
+            da.Fill(dt);
+
+            //dt is not null and rows count greater than 0
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                //Assign DataTable data to dgvCurrency using ItemSource property.   
+                dgvCurrency.ItemsSource = dt.DefaultView;
+            }
+            else
+            {
+                dgvCurrency.ItemsSource = null;
+            }
+            //Database connection Close
+            con.Close();
+        }
+
+        /// <summary>
+        /// This method runs when the 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            // Since databases are involved, will use try catch blocks
+            try
+            {
+                // If text amount or currency name is empty, display an error message.
+                if(txtAmount.Text == null || txtAmount.Text.Trim() == "")
+                {
+                    MessageBox.Show("Please enter an amount", "Information", MessageBoxButton.OK, MessageBoxImage.Error);
+                    txtAmount.Focus();
+                    return;
+                } else if (txtCurrencyName.Text == null || txtCurrencyName.Text.Trim() == "")
+                {
+                    MessageBox.Show("Please enter a currency name", "Information", MessageBoxButton.OK, MessageBoxImage.Error);
+                    txtCurrencyName.Focus();
+                    return;
+                } else
+                {
+                    // Check if we are not trying to edit the default record in the combo box which contains the "-- Select --" text.
+                    if (CurrencyId > 0)
+                    {
+                        // If the user wants to update a record and selects yes.
+                        if (MessageBox.Show("Are you sure you want to update this record?", "Information", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                        {
+                            // Open a database connection.
+                            MyConnection();
+
+                            // Create a new DataTable Object to store the data received.
+                            DataTable dt = new DataTable();
+
+                            // Create an update query to update the data in Currency_Master Table. Run this query in our connection.
+                            cmd = new SqlCommand("UPDATE Currency_Master SET Amount = @Amount, CurrencyName = @CurrencyName WHERE Id = @Id", con);
+
+                            cmd.CommandType = CommandType.Text;
+
+                            // Updating parameter values for query.
+                            cmd.Parameters.AddWithValue("@Id", CurrencyId);
+                            cmd.Parameters.AddWithValue("@Amount", txtAmount.Text);
+                            cmd.Parameters.AddWithValue("@CurrencyName", txtCurrencyName.Text);
+                            cmd.ExecuteNonQuery();
+
+                            // Close the database connection
+                            con.Close();
+
+                            // Display an update successful message
+                            MessageBox.Show("Data Updated Successfully", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                    }
+                    else // Save Button code
+                    {
+                        if (MessageBox.Show("Are you sure you want to save?", "Information", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                        {
+                            // Open a database connection.
+                            MyConnection();
+
+                            // Create a new DataTable Object to store the data received.
+                            DataTable dt = new DataTable();
+
+                            // Create an insert query to add data in Currency_Master Table. Run this query in our connection.
+                            cmd = new SqlCommand("INSERT INTO Currency_Master(Amount,CurrencyName) VALUES(@Amount,@CurrencyName)", con);
+
+                            cmd.CommandType = CommandType.Text;
+
+                            // Updating parameter values for query.
+                            cmd.Parameters.AddWithValue("@Amount", txtAmount.Text);
+                            cmd.Parameters.AddWithValue("@CurrencyName", txtCurrencyName.Text);
+                            cmd.ExecuteNonQuery();
+
+                            // Close the database connection
+                            con.Close();
+
+                            // Display an update successful message
+                            MessageBox.Show("Data Saved Successfully", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                    }
+                    ClearMaster();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        /// <summary>
+        /// This method runs when the cancel button is clicked. It executes the ClearMaster() method.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ClearMaster();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        /// <summary>
+        /// Method triggers when a data grid cell is selected. In this data grid we have 2 icons.
+        /// The edit and delete icon. When the edit icon is selected, the save button changes into update.
+        /// When the delete icon is selected, a record is deleted from the data grid.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void dgvCurrency_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
+            try
+            {
+                //Creating object for DataGrid. Done by parsing the sender object.
+                DataGrid grd = (DataGrid)sender;
+                //Creating object for DataRowView using the grid current item row selected
+                DataRowView row_selected = grd.CurrentItem as DataRowView;
 
+                // if the row_selected is not null (It's not an empty row)
+                if (row_selected != null)
+                {
+                    // If the Currency DataGrid items count is greater than zero (If there are items in the data grid)
+                    if (dgvCurrency.Items.Count > 0)
+                    {
+                        // If the Data grid selected cell is greater than 0 (If we selected a cell)
+                        if (grd.SelectedCells.Count > 0)
+                        {
+                            //Get selected row Id column value and assign it to the CurrencyId variable
+                            CurrencyId = Int32.Parse(row_selected["Id"].ToString());
+
+                            // if the DisplayIndex is equal to zero then the Edit cell is selected
+                            if (grd.SelectedCells[0].Column.DisplayIndex == 0)
+                            {
+                                // Get the selected row Amount column value and Set it to the Amount textbox value
+                                txtAmount.Text = row_selected["Amount"].ToString();
+
+                                // Get the selected row CurrencyName column value and Set it to CurrencyName textbox value
+                                txtCurrencyName.Text = row_selected["CurrencyName"].ToString();
+
+                                // Change save button text from Save to Update
+                                btnSave.Content = "Update";
+                            }
+
+                            // IF DisplayIndex is equal to one then it's the Delete cell                    
+                            if (grd.SelectedCells[0].Column.DisplayIndex == 1)
+                            {
+                                //Show confirmation dialogue box
+                                if (MessageBox.Show("Are you sure you want to delete ?", "Information", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                                {
+                                    // Open a database connection
+                                    MyConnection();
+                                    DataTable dt = new DataTable();
+
+                                    //Execute delete query for delete record from table using Id
+                                    cmd = new SqlCommand("DELETE FROM Currency_Master WHERE Id = @Id", con);
+                                    cmd.CommandType = CommandType.Text;
+
+                                    //CurrencyId set in @Id parameter and send it in delete statement
+                                    cmd.Parameters.AddWithValue("@Id", CurrencyId);
+                                    cmd.ExecuteNonQuery();
+                                    con.Close();
+
+                                    MessageBox.Show("Data deleted successfully", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                                    ClearMaster();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }
