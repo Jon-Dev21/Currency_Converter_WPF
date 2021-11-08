@@ -1,0 +1,17 @@
+App.config sample
+
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+    <startup> 
+        <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.7.2" />
+    </startup>
+  <connectionStrings>
+    <add name="ConnectionString" connectionString="Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename={Your .mdf file path};Integrated Security=True" providerName="sqlserver"/>
+  </connectionStrings>
+</configuration>
+
+To get your .mdf filepath, go into the Database folder and right click on your .mdf file. 
+In the dropBox, select "Copy full path" and paste it in between the brackets ({}) in the connectionString "AttachDbFilename" property.
+
+If you haven't created your .mdf file, right click your Database folder, 
+add a new item and select the Service-Based Database file.
