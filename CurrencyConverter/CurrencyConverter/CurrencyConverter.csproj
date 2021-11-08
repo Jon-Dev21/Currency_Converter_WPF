@@ -104,11 +104,16 @@
   <ItemGroup>
     <Resource Include="Currency.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Icons\Edit-btn.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Icons\Currency.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\delete-btn.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
