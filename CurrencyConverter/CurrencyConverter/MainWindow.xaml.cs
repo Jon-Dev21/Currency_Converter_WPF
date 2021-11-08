@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -22,45 +24,44 @@ namespace CurrencyConverter
     /// </summary>
     public partial class MainWindow : Window
     {
+        //Create an object for SqlConnection (Used to establish a connection with a database)       
+        SqlConnection con = new SqlConnection();
+
+        //Create an object for SqlCommand (Used to run SQL Queries)
+        SqlCommand cmd = new SqlCommand();
+
+        //Create object for SqlDataAdapter (Used to communicate data in right format)
+        SqlDataAdapter da = new SqlDataAdapter();
+
+        private int currentId = 0;
+        private double FromAmount = 0;
+        private double ToAmount = 0;
+
         public MainWindow()
         {
             InitializeComponent();
             BindCurrency();
         }
 
+        /// <summary>
+        /// Method used to establish a Database connection.
+        /// </summary>
+        public void MyConnection()
+        {
+            // Database connection string
+            // Added System.Configuration to references in order to use Configuration Manager.
+            String Conn = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            con = new SqlConnection(Conn);
+            con.Open(); //Connection Open
+        }
 
         /// <summary>
         /// Method used to bind values to my combo boxes.
         /// </summary>
         private void BindCurrency()
         {
-            // using System.Data
-            // Creating new data table.
-            DataTable dtCurrency = new DataTable();
-
-            // Adding columns to the data table. (Text, Value)
-            dtCurrency.Columns.Add("Text");
-            dtCurrency.Columns.Add("Value");
-
-            // Add rows to the datatable with text and value (currency exchange rate).
-            dtCurrency.Rows.Add("-- SELECT --", 0);
-            dtCurrency.Rows.Add("INR - Indian Rupee", 1);
-            dtCurrency.Rows.Add("USD - US Dollar", 75);
-            dtCurrency.Rows.Add("EUR - Euro", 85);
-            dtCurrency.Rows.Add("SAR - Saudi Arabian Riyal", 20);
-            dtCurrency.Rows.Add("POUND", 5);
-            dtCurrency.Rows.Add("DEM - German Deutsche Mark", 43);
-
-            // Binding our DataTable to the ComboBox in the combo boxes
-            cmbFromCurrency.ItemsSource = dtCurrency.DefaultView;
-            cmbFromCurrency.DisplayMemberPath = "Text"; // What will be displayed in the dropdown combo box.
-            cmbFromCurrency.SelectedValuePath = "Value"; // What value will be internally given when something is selected.
-            cmbFromCurrency.SelectedIndex = 0; // Start our selection at index 0 
-
-            cmbToCurrency.ItemsSource = dtCurrency.DefaultView;
-            cmbToCurrency.DisplayMemberPath = "Text"; // What will be displayed in the dropdown combo box.
-            cmbToCurrency.SelectedValuePath = "Value"; // What value will be internally given when something is selected.
-            cmbToCurrency.SelectedIndex = 0; // Start our selection at index 0 
+            // BindStaticData();
+            BindDatabaseData();
         }
 
         /// <summary>
@@ -163,6 +164,108 @@ namespace CurrencyConverter
             txtCurrency.Focus();
         }
 
+        /// <summary>
+        /// Method is used to bind hardcoded currency data into our 
+        /// currency comboboxes using hardcoded values.
+        /// </summary>
+        private void BindStaticData()
+        {
+            // using System.Data
+            // Creating new data table.
+            DataTable dtCurrency = new DataTable();
+
+            // Adding columns to the data table. (Text, Value)
+            dtCurrency.Columns.Add("Text");
+            dtCurrency.Columns.Add("Value");
+
+            // Add rows to the datatable with text and value (currency exchange rate).
+            dtCurrency.Rows.Add("-- SELECT --", 0);
+            dtCurrency.Rows.Add("INR - Indian Rupee", 1);
+            dtCurrency.Rows.Add("USD - US Dollar", 75);
+            dtCurrency.Rows.Add("EUR - Euro", 85);
+            dtCurrency.Rows.Add("SAR - Saudi Arabian Riyal", 20);
+            dtCurrency.Rows.Add("POUND", 5);
+            dtCurrency.Rows.Add("DEM - German Deutsche Mark", 43);
+
+            // Binding our DataTable to the ComboBox in the combo boxes
+            cmbFromCurrency.ItemsSource = dtCurrency.DefaultView;
+            cmbFromCurrency.DisplayMemberPath = "Text"; // What will be displayed in the dropdown combo box.
+            cmbFromCurrency.SelectedValuePath = "Value"; // What value will be internally given when something is selected.
+            cmbFromCurrency.SelectedIndex = 0; // Start our selection at index 0 
+
+            cmbToCurrency.ItemsSource = dtCurrency.DefaultView;
+            cmbToCurrency.DisplayMemberPath = "Text"; // What will be displayed in the dropdown combo box.
+            cmbToCurrency.SelectedValuePath = "Value"; // What value will be internally given when something is selected.
+            cmbToCurrency.SelectedIndex = 0; // Start our selection at index 0 
+        }
+
+        /// <summary>
+        /// Method is used to bind currency data into our 
+        /// currency comboboxes using database values.
+        /// </summary>
+        private void BindDatabaseData()
+        {
+            // Open database connection.
+            MyConnection();
+
+            // Create a new DataTable Object to store the data received.
+            DataTable dt = new DataTable();
+
+            // Create a select statement query to get data from Currency_Master Table. Run this query in our connection.
+            cmd = new SqlCommand("SELECT Id, CurrencyName FROM Currency_Master", con);
+
+            cmd.CommandType = CommandType.Text;
+
+            //It accepts a parameter that contains the command text of the object's selectCommand property.
+            da = new SqlDataAdapter(cmd);
+
+            // Filling data table with data obtained from the query.
+            da.Fill(dt);
+
+
+            // Now Will be creating the first row for the table where the -- SELECT -- is displayed. 
+            // Similar to how BindStaticData() assigns this value to the comboBox.
+            // Creating an object for DataRow
+            DataRow newRow = dt.NewRow();
+
+            //Assigning a value to Id column
+            newRow["Id"] = 0;
+
+            //Assigning value to CurrencyName column
+            newRow["CurrencyName"] = "-- SELECT --";
+
+            //Inserting a new row in dt with the data at a 0 position
+            dt.Rows.InsertAt(newRow, 0);
+
+
+            // If the data table is not null or empty
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                //Assign the datatable data to from currency combobox using ItemSource property.
+                cmbFromCurrency.ItemsSource = dt.DefaultView;
+
+                //Assign the datatable data to to currency combobox using ItemSource property.
+                cmbToCurrency.ItemsSource = dt.DefaultView;
+            }
+
+            // Close database connection
+            con.Close();
+
+
+            //To display the underlying datasource for cmbFromCurrency
+            cmbFromCurrency.DisplayMemberPath = "CurrencyName";
+
+            //To use as the actual value for the items
+            cmbFromCurrency.SelectedValuePath = "Id";
+
+            //Show default item in combobox
+            cmbFromCurrency.SelectedValue = 0;
+
+            // Doing the same for the cmbToCurrency comboBox
+            cmbToCurrency.DisplayMemberPath = "CurrencyName";
+            cmbToCurrency.SelectedValuePath = "Id";
+            cmbToCurrency.SelectedValue = 0;
+        }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
