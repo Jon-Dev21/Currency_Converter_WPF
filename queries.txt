@@ -1,0 +1,9 @@
+#T-SQL Query to create the Currency_Master table.
+
+CREATE TABLE [dbo].[Currency_Master]
+(
+	[Id] INT IDENTITY (1,1) NOT NULL, 
+    [Amount] FLOAT NULL, 
+    [CurrencyName] NVARCHAR(60) NULL,
+	PRIMARY KEY CLUSTERED ([Id] ASC)
+)
