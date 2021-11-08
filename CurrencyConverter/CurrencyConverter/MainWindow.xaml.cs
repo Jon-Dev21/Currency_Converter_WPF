@@ -41,6 +41,7 @@ namespace CurrencyConverter
         {
             InitializeComponent();
             BindCurrency();
+            GetData();
         }
 
         /// <summary>
@@ -268,7 +269,7 @@ namespace CurrencyConverter
         }
 
         /// <summary>
-        /// This method is used to clear all input entered in the Currency Master tab.
+        /// This method is git p
         /// </summary>
         private void ClearMaster()
         {
