@@ -476,6 +476,7 @@ namespace CurrencyConverter
                             // IF DisplayIndex is equal to one then it's the Delete cell                    
                             if (grd.SelectedCells[0].Column.DisplayIndex == 1)
                             {
+                                
                                 //Show confirmation dialogue box
                                 if (MessageBox.Show("Are you sure you want to delete ?", "Information", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                                 {

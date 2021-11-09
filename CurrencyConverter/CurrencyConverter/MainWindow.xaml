@@ -182,14 +182,25 @@
                             <!--DataGrid Column where record id is stored. This column is hidden.-->
                             <DataGridTextColumn x:Name="Id" Header="Id" Width="100" CanUserResize="False" Visibility="Hidden" Binding="{Binding Path=Id}"/>
 
-                            <!--DataGrid Column where delete icon is displayed. This column uses a Data Template-->
-                            <DataGridTemplateColumn Header="" Width="70" IsReadOnly="True" DisplayIndex="0">
+                            <!--DataGrid Column where Edit icon is displayed. This column uses a Data Template-->
+                            <DataGridTemplateColumn Header="" Width="70" IsReadOnly="True" DisplayIndex="0" >
                                 <DataGridTemplateColumn.CellTemplate>
                                     <!--This data template contains the Edit Icon Image-->
                                     <DataTemplate>
                                         <Image Source="Icons\Edit-btn.png" ToolTip="Edit" Width="20" Height="20"  x:Name="Revise"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
+                                <!--Adding a style to change the background color
+                                when the Edit grid cell is clicked.-->
+                                <DataGridTemplateColumn.CellStyle>
+                                    <Style TargetType="DataGridCell">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="Background" Value="#FF19C019"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGridTemplateColumn.CellStyle>
                             </DataGridTemplateColumn>
                             
                             <!--DataGrid Column where delete icon is displayed. This column uses a Data Template-->
@@ -200,12 +211,49 @@
                                         <Image Source="Icons\delete-btn.png" ToolTip="Delete" Width="20" Height="20"  x:Name="Delete"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
+                                <!--Adding a style to change the background color
+                                when the Delete grid cell is clicked.-->
+                                <DataGridTemplateColumn.CellStyle>
+                                    <Style TargetType="DataGridCell">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="Background" Value="#FFF91E1E"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGridTemplateColumn.CellStyle>
                             </DataGridTemplateColumn>
+                            
                             <!--DataGrid Column where currency amount is displayed-->
-                            <DataGridTextColumn x:Name="Amount" Header="Amount" Width="100" CanUserResize="False" CanUserReorder="False" Binding="{Binding Path=Amount}" IsReadOnly="True"/>
+                            <DataGridTextColumn x:Name="Amount" Header="Amount" Width="100" CanUserResize="False" CanUserReorder="False" Binding="{Binding Path=Amount}" IsReadOnly="True">
+                                <!--Adding a style to change the background color
+                                when the currency amount grid cell is clicked.-->
+                                <DataGridTextColumn.CellStyle>
+                                    <Style TargetType="DataGridCell">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="Background" Value="#5236e0"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGridTextColumn.CellStyle>
+                            </DataGridTextColumn>
+
 
                             <!--DataGrid Column where currency name is displayed-->
-                            <DataGridTextColumn x:Name="CurrencyName" Header="Currency Name" Width="*" MinWidth="20" CanUserResize="False" CanUserReorder="False" Binding="{Binding Path=CurrencyName}" IsReadOnly="True"/>
+                            <DataGridTextColumn x:Name="CurrencyName" Header="Currency Name" Width="*" MinWidth="20" CanUserResize="False" CanUserReorder="False" Binding="{Binding Path=CurrencyName}" IsReadOnly="True">
+                                <!--Adding a style to change the background color
+                                when the currency name grid cell is clicked.-->
+                                <DataGridTextColumn.CellStyle>
+                                    <Style TargetType="DataGridCell">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="Background" Value="#FF807807"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGridTextColumn.CellStyle>
+                            </DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </StackPanel>
