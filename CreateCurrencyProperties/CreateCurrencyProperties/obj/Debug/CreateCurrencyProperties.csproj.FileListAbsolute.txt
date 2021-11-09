@@ -1,0 +1,7 @@
+C:\Users\jonac\Desktop\myCareer\Projects 2021\Currency_Converter_WPF\CreateCurrencyProperties\CreateCurrencyProperties\bin\Debug\CreateCurrencyProperties.exe.config
+C:\Users\jonac\Desktop\myCareer\Projects 2021\Currency_Converter_WPF\CreateCurrencyProperties\CreateCurrencyProperties\bin\Debug\CreateCurrencyProperties.exe
+C:\Users\jonac\Desktop\myCareer\Projects 2021\Currency_Converter_WPF\CreateCurrencyProperties\CreateCurrencyProperties\bin\Debug\CreateCurrencyProperties.pdb
+C:\Users\jonac\Desktop\myCareer\Projects 2021\Currency_Converter_WPF\CreateCurrencyProperties\CreateCurrencyProperties\obj\Debug\CreateCurrencyProperties.csproj.AssemblyReference.cache
+C:\Users\jonac\Desktop\myCareer\Projects 2021\Currency_Converter_WPF\CreateCurrencyProperties\CreateCurrencyProperties\obj\Debug\CreateCurrencyProperties.csproj.CoreCompileInputs.cache
+C:\Users\jonac\Desktop\myCareer\Projects 2021\Currency_Converter_WPF\CreateCurrencyProperties\CreateCurrencyProperties\obj\Debug\CreateCurrencyProperties.exe
+C:\Users\jonac\Desktop\myCareer\Projects 2021\Currency_Converter_WPF\CreateCurrencyProperties\CreateCurrencyProperties\obj\Debug\CreateCurrencyProperties.pdb
