@@ -24,6 +24,73 @@ namespace CurrencyConverter
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// This class calls an API that returns currency rates and values
+        /// </summary>
+        public class Root
+        {
+            public Rate rates { get; set; } // Gets all records in raets and set
+            public long timestamp;
+            public string license;
+        }
+
+        /// <summary>
+        /// This class contains a series of currency rates.
+        /// </summary>
+        public class Rate
+        {
+            /// <summary>
+            /// Indian rupee
+            /// </summary>
+            public double INR { get; set; }
+
+            /// <summary>
+            /// Japanese Yen
+            /// </summary>
+            public double JPY { get; set; }
+
+            /// <summary>
+            /// US Dollar
+            /// </summary>
+            public double USD { get; set; }
+
+            /// <summary>
+            /// New Zealand Dollar
+            /// </summary>
+            public double NZD { get; set; }
+
+            /// <summary>
+            /// Euro
+            /// </summary>
+            public double EUR { get; set; }
+
+            /// <summary>
+            /// Canadian Dollar
+            /// </summary>
+            public double CAD { get; set; }
+
+            /// <summary>
+            /// Icelandic Krona
+            /// </summary>
+            public double ISK { get; set; }
+
+            /// <summary>
+            /// Philippine Peso
+            /// </summary>
+            public double PHP { get; set; }
+
+            /// <summary>
+            /// Danish Kronw
+            /// </summary>
+            public double DKK { get; set; }
+
+            /// <summary>
+            /// Czech Koruna
+            /// </summary>
+            public double CZK { get; set; }
+
+        }
+
         //Create an object for SqlConnection (Used to establish a connection with a database)       
         SqlConnection con = new SqlConnection();
 
@@ -42,6 +109,9 @@ namespace CurrencyConverter
             InitializeComponent();
             BindCurrency();
             GetData();
+
+            // Adding Open exchange Rates API
+            //Creating new class Root & Rate
         }
 
         /// <summary>
@@ -114,7 +184,9 @@ namespace CurrencyConverter
             {
                 // Convert / Calculate the currency
                 // ("Currency to convert from" rate * Amount) / "Currency to convert to" rate
-                convertedValue = double.Parse(cmbFromCurrency.SelectedValue.ToString()) * double.Parse(txtCurrency.Text) / double.Parse(cmbToCurrency.SelectedValue.ToString());
+                FromAmount = double.Parse(cmbFromCurrency.SelectedValue.ToString());
+                ToAmount = double.Parse(cmbToCurrency.SelectedValue.ToString());
+                convertedValue = FromAmount * double.Parse(txtCurrency.Text) / ToAmount;
 
                 
 
