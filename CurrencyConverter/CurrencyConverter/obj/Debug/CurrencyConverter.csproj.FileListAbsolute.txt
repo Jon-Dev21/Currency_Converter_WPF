@@ -19,3 +19,5 @@ C:\Users\jonac\Desktop\myCareer\Projects 2021\Currency_Converter_WPF\CurrencyCon
 C:\Users\jonac\Desktop\myCareer\Projects 2021\Currency_Converter_WPF\CurrencyConverter\CurrencyConverter\bin\Debug\Database\CurrencyConverter.mdf
 C:\Users\jonac\Desktop\myCareer\Projects 2021\Currency_Converter_WPF\CurrencyConverter\CurrencyConverter\bin\Debug\Database\CurrencyConverter_log.ldf
 C:\Users\jonac\Desktop\myCareer\Projects 2021\Currency_Converter_WPF\CurrencyConverter\CurrencyConverter\obj\Debug\CurrencyConverter_Content.g.cs
+C:\Users\jonac\Desktop\myCareer\Projects 2021\Currency_Converter_WPF\CurrencyConverter\CurrencyConverter\bin\Debug\Newtonsoft.Json.dll
+C:\Users\jonac\Desktop\myCareer\Projects 2021\Currency_Converter_WPF\CurrencyConverter\CurrencyConverter\bin\Debug\Newtonsoft.Json.xml
