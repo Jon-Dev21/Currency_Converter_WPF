@@ -833,7 +833,7 @@ namespace CurrencyConverter
             DataTable dt = new DataTable();
 
             //Write Sql Query for Get data from database table. Query written in double quotes and after comma provide connection    
-            cmd = new SqlCommand("SELECT * FROM Currency_Master", con);
+            cmd = new SqlCommand("SELECT * FROM Currency_Master ORDER BY CurrencyName", con);
 
             //CommandType define Which type of command execute like Text, StoredProcedure, TableDirect.    
             cmd.CommandType = CommandType.Text;
@@ -939,6 +939,7 @@ namespace CurrencyConverter
                         }
                     }
                     ClearMaster();
+                    GetData();
                 }
             }
             catch (Exception ex)
