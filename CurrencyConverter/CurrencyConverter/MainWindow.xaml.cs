@@ -279,20 +279,14 @@ namespace CurrencyConverter
         public MainWindow()
         {
             InitializeComponent();
-            // Make an if statement here. If API data source selected, execute GetCurrencyValues. 
-            //BindCurrency();
-
-            // DatabaseData Execute BindCurrency()
-
-            // Method used only for Database Option.
+            PopulateDataSourceComboBox();
+            GetCurrencyValues();
+            BindCurrency(dataSourceCBox.Text);
+            // Show data from the database into Currency Master
             GetData();
 
-            // Else execute static option.
-
-            // Adding Open exchange Rates API
-            //Creating new class Root & Rate
-
-            GetCurrencyValues();
+            // Added Open exchange Rates API to get real time currency rates.
+            //Created new class Root & Rate
         }
 
         /// <summary>
@@ -302,7 +296,7 @@ namespace CurrencyConverter
         private async void GetCurrencyValues()
         {
             val = await GetDataFromAPI<Root>("https://openexchangerates.org/api/latest.json?app_id=bc0282de451246838fdd2bea4aaa3152");
-            BindCurrency();
+            //BindCurrency(dataSourceCBox.Text);
         }
 
         /// <summary>
@@ -336,7 +330,7 @@ namespace CurrencyConverter
                         // Convert the response string into a JSON Object
                         var ResponseObject = JsonConvert.DeserializeObject<Root>(ResponseString);
 
-                        MessageBox.Show("TimeStamp: " + ResponseObject.timestamp, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                        // MessageBox.Show("TimeStamp: " + ResponseObject.timestamp, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
 
                         return ResponseObject;
                     }
@@ -354,21 +348,51 @@ namespace CurrencyConverter
         /// </summary>
         public void MyConnection()
         {
-            // Database connection string
-            // Added System.Configuration to references in order to use Configuration Manager.
-            String Conn = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-            con = new SqlConnection(Conn);
-            con.Open(); //Connection Open
+            try
+            {
+                // Database connection string
+                // Added System.Configuration to references in order to use Configuration Manager.
+                String Conn = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+                con = new SqlConnection(Conn);
+                con.Open(); //Connection Open
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("A connection to the database could not be established.\nPlease set up a database and create a table using the queries provided in queries.txt. \nAfter this, provide a valid connection string to the MyConnection method., prov", "Database Connection Error", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
         /// <summary>
         /// Method used to bind and display values to my combo boxes.
         /// </summary>
-        private void BindCurrency()
+        private void BindCurrency(string DataSource)
         {
-            // BindStaticData();
-            // BindDatabaseData();
-            BindHttpData();
+            if(DataSource == "API")
+            {
+                BindHttpData();
+                ClearControls();
+            } else if(DataSource == "Database")
+            {
+                try
+                {
+                    BindDatabaseData();
+                    // Show data from the database into Currency Master
+                    GetData();
+                    ClearControls();
+                } catch (Exception e)
+                {
+                    MessageBox.Show("A connection to the database could not be established.\nPlease set up a database and create a table using the queries provided in queries.txt. \nAfter this, provide a valid connection string to the MyConnection method., prov","Database Connection Error",MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                
+            }
+            else if(DataSource == "Static Data")
+            {
+                BindStaticData();
+                ClearControls();
+            }
+
+            
+
         }
 
         /// <summary>
@@ -489,8 +513,8 @@ namespace CurrencyConverter
             // Add rows to the datatable with text and value (currency exchange rate).
             dtCurrency.Rows.Add("-- SELECT --", 0);
             dtCurrency.Rows.Add("INR - Indian Rupee", 1);
-            dtCurrency.Rows.Add("USD - US Dollar", 75);
-            dtCurrency.Rows.Add("EUR - Euro", 85);
+            dtCurrency.Rows.Add("USD - US Dollar", 1);
+            dtCurrency.Rows.Add("EUR - Euro", 0.86);
             dtCurrency.Rows.Add("SAR - Saudi Arabian Riyal", 20);
             dtCurrency.Rows.Add("POUND", 5);
             dtCurrency.Rows.Add("DEM - German Deutsche Mark", 43);
@@ -520,7 +544,7 @@ namespace CurrencyConverter
             DataTable dt = new DataTable();
 
             // Create a select statement query to get data from Currency_Master Table. Run this query in our connection.
-            cmd = new SqlCommand("SELECT Id, CurrencyName FROM Currency_Master", con);
+            cmd = new SqlCommand("SELECT Id, Amount, CurrencyName FROM Currency_Master", con);
 
             cmd.CommandType = CommandType.Text;
 
@@ -564,14 +588,14 @@ namespace CurrencyConverter
             cmbFromCurrency.DisplayMemberPath = "CurrencyName";
 
             //To use as the actual value for the items
-            cmbFromCurrency.SelectedValuePath = "Id";
+            cmbFromCurrency.SelectedValuePath = "Amount";
 
             //Show default item in combobox
             cmbFromCurrency.SelectedValue = 0;
 
             // Doing the same for the cmbToCurrency comboBox
             cmbToCurrency.DisplayMemberPath = "CurrencyName";
-            cmbToCurrency.SelectedValuePath = "Id";
+            cmbToCurrency.SelectedValuePath = "Amount";
             cmbToCurrency.SelectedValue = 0;
         }
 
@@ -777,7 +801,7 @@ namespace CurrencyConverter
         }
 
         /// <summary>
-        /// This method is git p
+        /// This method clears out fields from the Currency master tab.
         /// </summary>
         private void ClearMaster()
         {
@@ -788,7 +812,7 @@ namespace CurrencyConverter
                 btnSave.Content = "Save";
                 GetData();
                 CurrencyId = 0;
-                BindCurrency();
+                BindCurrency(dataSourceCBox.Text);
                 txtAmount.Focus();
             }
             catch (Exception ex)
@@ -1023,8 +1047,8 @@ namespace CurrencyConverter
         private void cmbFromCurrency_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //If currencies have been selected, convert currency automatically.
-            if (cmbFromCurrency.SelectedIndex != 0 && cmbToCurrency.SelectedIndex != 0)
-                Convert_Click(sender, e);
+            //if (cmbFromCurrency.SelectedIndex != 0 && cmbToCurrency.SelectedIndex != 0 && cmbFromCurrency.Text != "-- SELECT --" && cmbToCurrency.Text != "-- SELECT --")
+            //    Convert_Click(sender, e);
         }
 
         /// <summary>
@@ -1035,8 +1059,44 @@ namespace CurrencyConverter
         private void cmbToCurrency_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //If currencies have been selected, convert currency automatically.
-            if (cmbFromCurrency.SelectedIndex != 0 && cmbToCurrency.SelectedIndex != 0)
-                Convert_Click(sender, e);
+            //if (cmbFromCurrency.SelectedIndex != 0 && cmbToCurrency.SelectedIndex != 0 && cmbFromCurrency.Text != "-- SELECT --" && cmbToCurrency.Text != "-- SELECT --")
+            //    Convert_Click(sender, e);
+        }
+
+        /// <summary>
+        /// This method is executed when the Data Source combo box value has changed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dataSourceCBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            BindCurrency(dataSourceCBox.SelectedValue.ToString());
+        }
+
+        /// <summary>
+        /// This method gives the options to the combo box.
+        /// </summary>
+        private void PopulateDataSourceComboBox()
+        {
+            // using System.Data
+            // Creating new data table.
+            DataTable dtDataSource = new DataTable();
+
+            // Adding columns to the data table. (Text, Value)
+            dtDataSource.Columns.Add("Text");
+
+
+            // Add rows to the datatable with text and value (currency exchange rate).
+            dtDataSource.Rows.Add("Static Data");
+            dtDataSource.Rows.Add("Database");
+            dtDataSource.Rows.Add("API");
+            
+            
+            // Binding our DataTable to the ComboBox in the combo boxes
+            dataSourceCBox.ItemsSource = dtDataSource.DefaultView;
+            dataSourceCBox.DisplayMemberPath = "Text"; // What will be displayed in the dropdown combo box.
+            dataSourceCBox.SelectedValuePath = "Text"; // What value will be internally given when something is selected.
+            dataSourceCBox.SelectedIndex = 0; // Start our selection at index 0 
         }
     }
 }

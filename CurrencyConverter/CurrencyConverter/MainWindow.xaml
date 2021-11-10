@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CurrencyConverter" xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
         Title="Currency Converter" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" Icon="Currency.ico" MinHeight="650" MinWidth="1200">
-        <!--SizeToContent is used to size the window using the width and height of all the content in the window-->
+    <!--SizeToContent is used to size the window using the width and height of all the content in the window-->
 
     <!-- Adding Tabs to our window. TabStripPlacement property is used to tell the UI where to place the tab-->
     <TabControl Name="MainTab" TabStripPlacement="Top">
@@ -101,6 +101,10 @@
                 <StackPanel Grid.Row="4" Height="150" Width="795" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
                     <Image Height="150" Width="170" Source="Icons\Currency.png"  Margin="325 0"/>
                 </StackPanel>
+                <!--Label for the data source combo box-->
+                <Label Content="Data Source" HorizontalAlignment="Left" Margin="50,16.2,0,0" Grid.Row="1" VerticalAlignment="Top" Width="120" FontWeight="Bold" FontSize="16"/>
+                <ComboBox Name="dataSourceCBox" HorizontalAlignment="Left" Margin="55,48.2,0,0" Grid.Row="1" VerticalAlignment="Top" Width="120" SelectionChanged="dataSourceCBox_SelectionChanged"/>
+
             </Grid>
         </TabItem>
         <!-- ====================================================================================================================================== -->
@@ -116,7 +120,7 @@
                     <RowDefinition Height="200"></RowDefinition>
                     <RowDefinition Height="150"></RowDefinition>
                 </Grid.RowDefinitions>
-                
+
                 <!--Creating a border for the grind row 1 of the Grid in the Currency Master Tab-->
                 <Border Grid.Row="1" Width="800" CornerRadius="10" BorderThickness="5" Margin="100,0">
                     <Border.BorderBrush>
@@ -202,7 +206,7 @@
                                     </Style>
                                 </DataGridTemplateColumn.CellStyle>
                             </DataGridTemplateColumn>
-                            
+
                             <!--DataGrid Column where delete icon is displayed. This column uses a Data Template-->
                             <DataGridTemplateColumn Header="" Width="70" IsReadOnly="True" DisplayIndex="1">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -223,7 +227,7 @@
                                     </Style>
                                 </DataGridTemplateColumn.CellStyle>
                             </DataGridTemplateColumn>
-                            
+
                             <!--DataGrid Column where currency amount is displayed-->
                             <DataGridTextColumn x:Name="Amount" Header="Amount" Width="100" CanUserResize="False" CanUserReorder="False" Binding="{Binding Path=Amount}" IsReadOnly="True">
                                 <!--Adding a style to change the background color
@@ -265,5 +269,5 @@
             </Grid>
         </TabItem>
     </TabControl>
-    
+
 </Window>
